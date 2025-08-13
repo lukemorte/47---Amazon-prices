@@ -2,8 +2,15 @@
 
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 WEB_URL = "https://appbrewery.github.io/instant_pot/"
+MAIL_SMTP = "seznam.smtp.cz"
+MAIL_EMAIL = os.getenv("SEZNAM_EMAIL")
+MAIL_PASSWORD = os.getenv("SEZNAM_PASSWORD")
 
 HTTP_HEADER = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
