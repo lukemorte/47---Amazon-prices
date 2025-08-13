@@ -22,6 +22,22 @@ HTTP_HEADER = {
     "(KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
 }
 
+
+def send_mail():
+    with smtplib.SMTP(MAIL_SMTP) as connection:
+        connection.starttls()
+        connection.login(user=MAIL_EMAIL, password=MAIL_PASSWORD)
+
+        msg = EmailMessage()
+        msg.set_content(f"The price of the product on Amazon site went down of the treshold to {price}.")
+
+        msg["Subject"] = "Amazon Price dropdown"
+        msg["From"] = MAIL_EMAIL
+        msg["To"] = MAIL_TO
+
+        connection.send_message(msg)
+
+
 # connection
 
 response = requests.get(url=WEB_URL, headers=HTTP_HEADER)
@@ -36,15 +52,4 @@ price_fraction = html_entity.find(name="span", class_="a-price-fraction").get_te
 price = float(f"{price_number}{price_fraction}")
 
 if price < TARGET_PRICE:
-    with smtplib.SMTP(MAIL_SMTP) as connection:
-        connection.starttls()
-        connection.login(user=MAIL_EMAIL, password=MAIL_PASSWORD)
-
-        msg = EmailMessage()
-        msg.set_content(f"The price of the product on Amazon site went down of the treshold to {price}.")
-
-        msg["Subject"] = "Amazon Price dropdown"
-        msg["From"] = MAIL_EMAIL
-        msg["To"] = MAIL_TO
-
-        connection.send_message(msg)
+    send_mail()
