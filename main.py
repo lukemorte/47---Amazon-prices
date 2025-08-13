@@ -19,5 +19,11 @@ HTTP_HEADER = {
 
 response = requests.get(url=WEB_URL, headers=HTTP_HEADER)
 html = response.text
-html_data = BeautifulSoup(html, features="html.parser")
+soup = BeautifulSoup(html, features="html.parser")
+
+html_entity = soup.find(name="div", id="corePriceDisplay_desktop_feature_div")
+price_number = html_entity.find(name="span", class_="a-price-whole").get_text()
+price_fraction = html_entity.find(name="span", class_="a-price-fraction").get_text()
+price = float(f"{price_number}{price_fraction}")
+
 
